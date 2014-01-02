@@ -24,7 +24,7 @@ def current_user=(user)
     user == current_user
   end
   
-    def redirect_back_or(default)
+  def redirect_back_or(default)
     redirect_to(session[:return_to] || default)
     session.delete(:return_to)
   end
@@ -34,11 +34,6 @@ def current_user=(user)
       store_location
       redirect_to signin_path, notice: "Please sign in." 
     end
-  end
-  
-def redirect_back_or(default)
-    redirect_to(session[:return_to] || default)
-    session.delete(:return_to)
   end
 
   def store_location
