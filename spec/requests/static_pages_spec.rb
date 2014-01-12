@@ -21,7 +21,24 @@ describe "Static pages" do
         visit root_path
       end
 	  
+	 it "should render the user's feed" do
+        user.feed.each do |item|
+          expect(page).to have_selector("li##{item.id}", text: item.content)
+        end
+      end 
 	 
+	  describe "follower/following counts" do
+        let(:other_user) { FactoryGirl.create(:user) }
+        before do
+          other_user.follow!(user)
+          visit root_path
+        end
+		
+		it { should have_link("0 following", href: following_user_path(user)) }
+        it { should have_link("1 followers", href: followers_user_path(user)) }
+      end
+    end
+ 
 
   describe "Help page" do
     before { visit help_path }
@@ -42,13 +59,5 @@ describe "Static pages" do
 
     it { should have_content('Contact') }
     it { should have_title(full_title('Contact')) }
-  end
-
-   it "should render the user's feed" do
-        user.feed.each do |item|
-          expect(page).to have_selector("li##{item.id}", text: item.content)
-        end
-      end
-    end
-  end
-
+  end 
+end
